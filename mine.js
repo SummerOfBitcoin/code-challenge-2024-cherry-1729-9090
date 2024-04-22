@@ -22,7 +22,7 @@ function mine(block_header) {
 let mined_block = mine(block_header);
 
 
-console.log(mined_block.toString('hex').length);
+console.log(mined_block);
 
 
 

@@ -143,5 +143,4 @@ txns.unshift(coinbase_tx); // added the coinbase transaction to the txns array
 const merkleroot = generateMerkleRoot(txns); // merkle root of the txns array
 const witnesscommitment = generate_witness_commitment(merkleroot); // witness commitment of the merkle root
 
-console.log(coinbase_tx);
 module.exports = {merkleroot,txns,coinbase_tx}; //exporting the merkle root and txns array
