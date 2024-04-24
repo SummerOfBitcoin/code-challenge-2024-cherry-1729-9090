@@ -37,7 +37,7 @@ function concVin(transaction) {
   let concatStr = "";
   transaction.vin.forEach(vin => {
     const sigSize = vin.scriptsig.length / 2;
-    concatStr += littleEndian(vin.txid) + littleEndian(toHex(vin.vout).padStart(8, '0')) + toHex(sigSize).padStart(2, '0') + vin.scriptsig + littleEndian(toHex(vin.sequence));
+    concatStr += littleEndian(vin.txid) + littleEndian(toHex(vin.vout).padStart(8, '0')) + (sigSize).toString(16).padStart(2, '0') + vin.scriptsig + littleEndian((vin.sequence).toString(16));
   });
   return concatStr;
 }
@@ -45,7 +45,7 @@ function concVin(transaction) {
 function concVout(transaction) {
   let concatStr = "";
   transaction.vout.forEach(vout => {
-    concatStr += littleEndian(vout.value.toString(16).padStart(16, '0')) + toHex(vout.scriptpubkey.length / 2).padStart(2, '0') + vout.scriptpubkey;
+    concatStr += littleEndian(vout.value.toString(16).padStart(16, '0')) + toHex(vout.scriptpubkey.length / 2).toString(16).padStart(2, '0') + vout.scriptpubkey;
   });
   return concatStr;
 }
