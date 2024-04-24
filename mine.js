@@ -5,8 +5,8 @@ const {txAll,coinbase_tx} = require('./coinbasetxn.js');
 
 // Implement the mine function that takes a block header as input and returns the mined block
 function mine(block_header) {
+    const target = Buffer.from("0000ffff00000000000000000000000000000000000000000000000000000000","hex"); // Convert target to buffer
     let nonce = 0;
-    const target = Buffer.from("0000ffff00000000000000000000000000000000000000000000000000000000"); // Convert target to buffer
     let paddedNonce = nonce.toString(16).padStart(8, '0'); // Pad nonce with leading zeros to make it 4 bytes
     while (true) {
 
