@@ -63,7 +63,7 @@ const generateMerkleRoot = (txids) => {
           // 78
       coinbase_tx += "ffffffff"; // previous output // 8
          // 86
-      coinbase_tx += "00" 
+      coinbase_tx += "25246920616d206e61726173696d686120616e64206920616d20736f6c76696e672062697463"; // coinbase scriptSig // 37 
       coinbase_tx += "ffffffff"; // sequence
       coinbase_tx += "02"; // number of outputs
 
