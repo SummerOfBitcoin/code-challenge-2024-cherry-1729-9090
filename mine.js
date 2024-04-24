@@ -12,7 +12,7 @@ function mine(block_header) {
 
         const hash = Buffer.from(littleEndian(doubleHash(block_header + littleEndian(paddedNonce))), 'hex'); // Convert hash to buffer
         // Compare hashes using buffer compare method
-        if (hash.compare(target) > 0) { 
+        if (hash.compare(target) < 0) { 
             console.log(paddedNonce)
             return block_header + littleEndian(paddedNonce);
 
