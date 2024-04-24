@@ -46,6 +46,7 @@ const generateMerkleRoot = (txids) => {
 
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
+    wtxns.unshift('0'.padStart(64,'0')); // add the coinbase txid to the wtxns array
       const witness_commitment = generate_witness_commitment(generateMerkleRoot(wtxns));
 
       const scriptpubkey = '6a24aa21a9ed' + witness_commitment.toString('hex'); // Concatenate with the hexadecimal string of witness_commitment

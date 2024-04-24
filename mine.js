@@ -24,9 +24,6 @@ function mine(block_header) {
 }
 
 let mined_block = mine(block_header);
-// console.log(mined_block);
-
-
 
 
 const fs = require('fs');
@@ -36,10 +33,8 @@ function writeToOutputFile() {
     outputData.push(coinbase_tx)
     outputData.push(...txAll);
 
-    // Join data with newline character
     const outputContent = outputData.join('\n');
 
-    // Write data to output.txt file
     fs.writeFile('output.txt', outputContent, (err) => {
         if (err) {
             console.error('Error writing to file:', err);
@@ -49,7 +44,6 @@ function writeToOutputFile() {
     });
 }
 
-// Call function to write data to file
 writeToOutputFile();
 
 
