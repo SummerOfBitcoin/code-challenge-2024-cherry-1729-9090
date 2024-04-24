@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { checkSig_p2wpkh } = require("./p2wpkh.js");
-const {calculateTransactionWeight} = require("./txweight.js")
+const {calculateTransactionWeight} = require("./txweight.js");
+const { p2pkh } = require("bitcoinjs-lib/src/payments/p2pkh.js");
 
 let wtxns = [];
 let txAll = []
@@ -66,6 +67,8 @@ function generateMerkleRoot(txids) {
   
     return hashes[0].toString("hex");
   };
+
+
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
     wtxns.unshift('0'.padStart(64,'0')); 
@@ -110,6 +113,31 @@ function generateMerkleRoot(txids) {
   }
 
 
+
+
+
+  function checkp2pkh(tx){
+    for(let i = 0;i < tx.vin.length;i++){
+        // console.log(tx.vin[i].prevout.scriptpubkey_type == "p2pkh")
+        if(tx.vin[i].prevout.scriptpubkey_type != "p2pkh"){
+            return false;
+        }
+    }
+    return true;
+  }
+
+  function checkp2wpkh(tx){
+    for(let i = 0;i < tx.vin.length;i++){
+        // console.log(tx.vin[i].prevout.scriptpubkey_type)
+        if(tx.vin[i].prevout.scriptpubkey_type != "v0_p2wpkh"){
+            return false;
+        }
+    }
+    return true;
+  }
+
+
+
 // read all the files in the directory
 const targetweight = 4 * 1000 *1000
 let weightTill = 320 // block weight
@@ -122,16 +150,18 @@ try {
         const transactionType = data.vin[0].prevout.scriptpubkey_type;
         const fileVerification = verifyFiles(data);
         if (transactionType === "p2pkh") {
-            if (filename === fileVerification) {
-                if (checkStack(data)){
-                    if( calculateTransactionWeight(data)){
-                        weightTill += calculateTransactionWeight(data); // calculating the transaction weight 
-                        if(weightTill < targetweight){
-                            wtxns.push(littleEndian(serializeP2pkh(data))); //pushing the little endain form of the normal txid
-                            txAll.push(littleEndian(serializeP2pkh(data)));
-                        }else{
-                            weightTill += calculateTransactionWeight(data); // calculating the transaction weight
-                            break;
+            if(checkp2pkh(data)){
+                if (filename === fileVerification) {
+                    if (checkStack(data)){
+                        if( calculateTransactionWeight(data)){
+                            weightTill += calculateTransactionWeight(data); // calculating the transaction weight 
+                            if(weightTill < targetweight){
+                                wtxns.push(littleEndian(serializeP2pkh(data))); //pushing the little endain form of the normal txid
+                                txAll.push(littleEndian(serializeP2pkh(data)));
+                            }else{
+                                weightTill += calculateTransactionWeight(data); // calculating the transaction weight
+                                break;
+                            }
                         }
                     }
                 }
@@ -139,20 +169,23 @@ try {
         }
 
         if (transactionType === "v0_p2wpkh") {
-            if (filename === fileVerification) {
-               if (checkSig_p2wpkh(data)){ 
-                    if(calculateTransactionWeight(data)){
-                        weightTill += calculateTransactionWeight(data); // calculating the transaction weight
-                        if(weightTill < targetweight){
-                            wtxns.push(littleEndian(create_wtxid(data))); //pushing the little endain form of the wtxid
-                            txAll.push(littleEndian(serializeP2pkh(data)))
-                        }
-                        else{
+
+            if(checkp2wpkh(data)){
+                if (filename === fileVerification) {
+                   if (checkSig_p2wpkh(data)){ 
+                        if(calculateTransactionWeight(data)){
                             weightTill += calculateTransactionWeight(data); // calculating the transaction weight
-                            break;
+                            if(weightTill < targetweight){
+                                wtxns.push(littleEndian(create_wtxid(data))); //pushing the little endain form of the wtxid
+                                txAll.push(littleEndian(serializeP2pkh(data)))
+                            }
+                            else{
+                                weightTill += calculateTransactionWeight(data); // calculating the transaction weight
+                                break;
+                            }
                         }
-                    }
-               }
+                   }
+                }
             }
 
         }
