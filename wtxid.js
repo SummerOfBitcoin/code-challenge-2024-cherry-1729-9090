@@ -130,6 +130,5 @@ tx = {
 }
 
 
-console.log(create_wtxid(tx));
 
 module.exports = {create_wtxid}

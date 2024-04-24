@@ -17,38 +17,61 @@ const directory = './mempool';
 
 
 // function to generate the merkle root
-const generateMerkleRoot = (txids) => {
-    if (txids.length === 0) return null
+// const generateMerkleRoot = (txids) => {
+//     if (txids.length === 0) return null
 
-  // reverse the txids
-  let level = txids.map((txid) => Buffer.from(txid, 'hex').reverse().toString('hex'))
+//   // reverse the txids
+//   let level = txids.map((txid) => Buffer.from(littleEndian(txid), 'hex'))
 
-  while (level.length > 1) {
-    const nextLevel = []
+//   while (level.length > 1) {
+//     const nextLevel = []
 
-    for (let i = 0; i < level.length; i += 2) {
-      let pairHash
-      if (i + 1 === level.length) {
-        // In case of an odd number of elements, duplicate the last one
-        pairHash = doubleHash(level[i] + level[i])
-      } else {
-        pairHash = doubleHash(level[i] + level[i + 1])
+//     for (let i = 0; i < level.length; i += 2) {
+//       let pairHash
+//       if (i + 1 === level.length) {
+//         // In case of an odd number of elements, duplicate the last one
+//         pairHash = doubleHash(Buffer.concat([level[i] , level[i]]))
+//       } else {
+//         pairHash = doubleHash(Buffer.concat([level[i] , level[i + 1]]))
+//       }
+//       nextLevel.push(Buffer.from(pairHash, "hex"));
+//     }
+
+//     level = nextLevel
+//   }
+
+//   return level[0].toString('hex')
+//   };
+
+function generateMerkleRoot(txids) {
+    let hashes = txids.map((txid) =>
+      Buffer.from(txid.match(/../g).reverse().join(""), "hex")
+    );
+  
+    while (hashes.length > 1) {
+      let newHashes = [];
+      for (let i = 0; i < hashes.length; i += 2) {
+        let left = hashes[i];
+        let right = "";
+        if (i + 1 === hashes.length) {
+          right = left;
+        } else {
+          right = hashes[i + 1];
+        }
+        let hash = doubleHash(Buffer.concat([left, right]));
+        newHashes.push(Buffer.from(hash, "hex"));
       }
-      nextLevel.push(pairHash)
+      hashes = newHashes;
     }
-
-    level = nextLevel
-  }
-
-  return level[0]
+  
+    return hashes[0].toString("hex");
   };
-
-
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
-    wtxns.unshift('0'.padStart(64,'0')); // add the coinbase txid to the wtxns array
-    // console.log(wtxns);
-      const witness_commitment = generate_witness_commitment(generateMerkleRoot(wtxns));
+    wtxns.unshift('0'.padStart(64,'0')); 
+    console.log("wtxns",wtxns)
+    console.log("wmkrlrt",generateMerkleRoot(wtxns))
+    const witness_commitment = generate_witness_commitment(generateMerkleRoot(wtxns));
       console.log("wcom",witness_commitment)
       const scriptpubkey = '6a24aa21a9ed' + witness_commitment.toString('hex'); // Concatenate with the hexadecimal string of witness_commitment
       const scriptsig = "49366144657669436872616E496C6F7665426974636F696E4D696E696E67"; // coinbase scriptSig
@@ -74,7 +97,7 @@ const generateMerkleRoot = (txids) => {
 
       //output 2
       coinbase_tx += "0000000000000000" // value - 2
-      coinbase_tx += (scriptpubkey.length/2).toString(16) + scriptpubkey; // scriptpubkey
+      coinbase_tx += (scriptpubkey.length/2).toString(16).padStart('0',2) + scriptpubkey; // scriptpubkey
       coinbase_tx += "01"; // number of witnesses
       coinbase_tx += "20"; // size of witness commitment
       coinbase_tx += "0000000000000000000000000000000000000000000000000000000000000000";
@@ -139,7 +162,6 @@ try {
 } catch (err) {
     console.error('Error:', err);
 }
-
 
 
 

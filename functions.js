@@ -29,7 +29,7 @@ function ripemd160(data) {
 
 function doubleHash(dataHex) {
   const firstHash = crypto.createHash('sha256').update(Buffer.from(dataHex, 'hex')).digest('hex');
-  const secondHash = crypto.createHash('sha256').update(Buffer.from(firstHash, 'hex')).digest('hex');
+  const secondHash = crypto.createHash('sha256').update(firstHash, 'hex').digest('hex');
   return secondHash;
 }
 
