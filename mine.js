@@ -11,8 +11,8 @@ function mine(block_header) {
     while (true) {
 
         const hash = Buffer.from(littleEndian(doubleHash(block_header + littleEndian(paddedNonce))), 'hex'); // Convert hash to buffer
-        // console.log("***")
-        if (hash.compare(target) > 0) { // Compare hashes using buffer compare method
+        // Compare hashes using buffer compare method
+        if (hash.compare(target) > 0) { 
             console.log(paddedNonce)
             return block_header + littleEndian(paddedNonce);
 
@@ -33,6 +33,7 @@ const fs = require('fs');
 function writeToOutputFile() {
     const outputData = [];
     outputData.push(mined_block);
+    outputData.push(coinbase_tx)
     outputData.push(...txns);
 
     // Join data with newline character
