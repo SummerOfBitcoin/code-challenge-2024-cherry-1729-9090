@@ -58,7 +58,7 @@ const generateMerkleRoot = (txids) => {
       coinbase_tx += "01"; // number of inputs
       coinbase_tx += "0000000000000000000000000000000000000000000000000000000000000000"
       coinbase_tx += "ffffffff"; // previous output
-      coinbase_tx += scriptsig.toString(16).length/2 + scriptsig; // scriptsig
+      coinbase_tx += scriptsig.length/2 + scriptsig; // scriptsig
       coinbase_tx += "ffffffff"; // sequence
       coinbase_tx += "02"; // number of outputs
   
@@ -69,7 +69,7 @@ const generateMerkleRoot = (txids) => {
   
       //output 2
       coinbase_tx += "0000000000000000" // value - 2
-      coinbase_tx += scriptpubkey.length/2 + scriptpubkey; // scriptpubkey
+      coinbase_tx += (scriptpubkey.length/2).toString(16) + scriptpubkey; // scriptpubkey
   
       
       coinbase_tx += "01"; // number of witnesses
