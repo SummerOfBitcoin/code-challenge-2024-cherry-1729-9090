@@ -88,10 +88,10 @@ const generateMerkleRoot = (txids) => {
 
 
 // read all the files in the directory
+const targetweight = 4 * 1000 *1000
+let weightTill = 320 // block weight
 try {
     const files = fs.readdirSync(directory);
-    const targetweight = 4000000
-    let weightTill = 0
     for (const filename of files) {
         const filepath = path.join(directory, filename);
         const fileData = fs.readFileSync(filepath, 'utf8');
@@ -101,12 +101,13 @@ try {
         if (transactionType === "p2pkh") {
             if (filename === fileVerification) {
                 if (checkStack(data)){
-                    if(typeof calculateTransactionWeight(data) != Boolean){
+                    if( calculateTransactionWeight(data)){
                         weightTill += calculateTransactionWeight(data); // calculating the transaction weight 
                         if(weightTill < targetweight){
                             txns.push(littleEndian(serializeP2pkh(data))); //pushing the little endain form of the normal txid
                             txAll.push(littleEndian(serializeP2pkh(data)));
                         }else{
+                            weightTill += calculateTransactionWeight(data); // calculating the transaction weight
                             break;
                         }
                     }
@@ -117,13 +118,14 @@ try {
         if (transactionType === "v0_p2wpkh") {
             if (filename === fileVerification) {
                if (checkSig_p2wpkh(data)){ 
-                    if( typeof calculateTransactionWeight(data) != Boolean){
+                    if(calculateTransactionWeight(data)){
                         weightTill += calculateTransactionWeight(data); // calculating the transaction weight
                         if(weightTill < targetweight){
                             wtxns.push(littleEndian(create_wtxid(data))); //pushing the little endain form of the wtxid
                             txAll.push(littleEndian(serializeP2pkh(data)))
                         }
                         else{
+                            weightTill += calculateTransactionWeight(data); // calculating the transaction weight
                             break;
                         }
                     }
@@ -137,6 +139,8 @@ try {
 } catch (err) {
     console.error('Error:', err);
 }
+
+console.log(weightTill)
 
 
 
