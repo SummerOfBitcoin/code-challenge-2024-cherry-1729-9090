@@ -165,4 +165,4 @@ fs.writeFile(fileName3, fileContent3, (err) => {
 
 const merkleroot = generateMerkleRoot(txAll); // merkle root of the txns array
 
-module.exports = {merkleroot,txns,coinbase_tx}; //exporting the merkle root and txns array
+module.exports = {merkleroot,txAll,coinbase_tx}; //exporting the merkle root and txns array
