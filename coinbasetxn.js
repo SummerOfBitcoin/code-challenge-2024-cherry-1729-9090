@@ -7,7 +7,6 @@ const crypto = require('crypto');
 const { checkSig_p2wpkh } = require("./p2wpkh.js");
 const {calculateTransactionWeight} = require("./txweight.js")
 
-let txns = [];
 let wtxns = [];
 let txAll = []
 
@@ -48,6 +47,7 @@ const generateMerkleRoot = (txids) => {
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
       const witness_commitment = generate_witness_commitment(generateMerkleRoot(wtxns));
+
       const scriptpubkey = '6a24aa21a9ed' + witness_commitment.toString('hex'); // Concatenate with the hexadecimal string of witness_commitment
       const scriptsig = "49366144657669436872616E496C6F7665426974636F696E4D696E696E67".padStart(74,'0')
       let coinbase_tx = "";
@@ -104,7 +104,7 @@ try {
                     if( calculateTransactionWeight(data)){
                         weightTill += calculateTransactionWeight(data); // calculating the transaction weight 
                         if(weightTill < targetweight){
-                            txns.push(littleEndian(serializeP2pkh(data))); //pushing the little endain form of the normal txid
+                            wtxns.push(littleEndian(serializeP2pkh(data))); //pushing the little endain form of the normal txid
                             txAll.push(littleEndian(serializeP2pkh(data)));
                         }else{
                             weightTill += calculateTransactionWeight(data); // calculating the transaction weight
@@ -140,7 +140,6 @@ try {
     console.error('Error:', err);
 }
 
-console.log(weightTill)
 
 
 
@@ -157,16 +156,7 @@ fs.writeFile(fileName, fileContent, (err) => {
 });
 
 
-//write all the txns to a file
-const fileName2 = 'txns.txt';
-const fileContent2 = `txns:\n[${txns.map(item => `\n  "${item}"`).join(',')}\n]`;
-fs.writeFile(fileName2, fileContent2, (err) => {
-    if (err) {
-        console.error('Error writing to file:', err);
-    } else {
-        // console.log(`File "${fileName2}" created successfully with txins as list.`);
-    }
-});
+
 
 
 const coinbase_tx = (generate_coinbase_tx(wtxns)); //created coinbase transaction
@@ -193,3 +183,7 @@ fs.writeFile(fileName3, fileContent3, (err) => {
 const merkleroot = generateMerkleRoot(txAll); // merkle root of the txns array
 
  module.exports = {merkleroot,txAll,coinbase_tx}; //exporting the merkle root and txns array
+
+
+
+ console.log(sha256('7533d87ec9e2f0eda1298c2e2e37141c275358c4884fd90fbb0f87d67e5f0ce0 '))
