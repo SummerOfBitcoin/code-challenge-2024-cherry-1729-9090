@@ -80,7 +80,7 @@ const generateMerkleRoot = (txids) => {
   }
   
   function generate_witness_commitment(W_merkleroot){
-      return doubleHash("0000000000000000000000000000000000000000000000000000000000000000" + W_merkleroot)
+      return doubleHash( W_merkleroot + "0000000000000000000000000000000000000000000000000000000000000000")
   }
 
 
