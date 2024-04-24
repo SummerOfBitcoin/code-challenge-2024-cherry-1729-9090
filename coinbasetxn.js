@@ -34,13 +34,13 @@ const generateMerkleRoot = (txids) => {
       } else {
         pairHash = doubleHash(level[i] + level[i + 1])
       }
-      nextLevel.push(Buffer.from(pairHash,'hex'))
+      nextLevel.push(pairHash)
     }
 
     level = nextLevel
   }
 
-  return level[0].toString('hex')
+  return level[0]
   };
 
 
@@ -84,7 +84,7 @@ const generateMerkleRoot = (txids) => {
   }
   
   function generate_witness_commitment(W_merkleroot){
-      return doubleHash( W_merkleroot + "0000000000000000000000000000000000000000000000000000000000000000")
+      return doubleHash( W_merkleroot + "0".padStart(64,'0'));
   }
 
 
@@ -183,8 +183,5 @@ fs.writeFile(fileName3, fileContent3, (err) => {
 
 const merkleroot = generateMerkleRoot(txAll); // merkle root of the txns array
 
- module.exports = {merkleroot,txAll,coinbase_tx}; //exporting the merkle root and txns array
+module.exports = {merkleroot,txAll,coinbase_tx}; //exporting the merkle root and txns array
 
-
-
- console.log(sha256('7533d87ec9e2f0eda1298c2e2e37141c275358c4884fd90fbb0f87d67e5f0ce0 '))
