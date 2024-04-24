@@ -49,8 +49,9 @@ const generateMerkleRoot = (txids) => {
     wtxns.unshift('0'.padStart(64,'0')); // add the coinbase txid to the wtxns array
     // console.log(wtxns);
       const witness_commitment = generate_witness_commitment(generateMerkleRoot(wtxns));
+      console.log("wcom",witness_commitment)
       const scriptpubkey = '6a24aa21a9ed' + witness_commitment.toString('hex'); // Concatenate with the hexadecimal string of witness_commitment
-      const scriptsig = "49366144657669436872616E496C6F7665426974636F696E4D696E696E67".padStart(74,'0')
+      const scriptsig = "49366144657669436872616E496C6F7665426974636F696E4D696E696E67"; // coinbase scriptSig
       let coinbase_tx = "";
       coinbase_tx += "01000000"; // version
           // 8
@@ -62,9 +63,7 @@ const generateMerkleRoot = (txids) => {
           // 78
       coinbase_tx += "ffffffff"; // previous output // 8
          // 86
-      coinbase_tx += (scriptsig.length/2).toString(16) ; // scriptsig //2
-         //88
-      coinbase_tx += scriptsig  
+      coinbase_tx += "00" 
       coinbase_tx += "ffffffff"; // sequence
       coinbase_tx += "02"; // number of outputs
 
