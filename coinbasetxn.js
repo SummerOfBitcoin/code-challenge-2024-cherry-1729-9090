@@ -34,21 +34,21 @@ const generateMerkleRoot = (txids) => {
       } else {
         pairHash = doubleHash(level[i] + level[i + 1])
       }
-      nextLevel.push(pairHash)
+      nextLevel.push(Buffer.from(pairHash,'hex'))
     }
 
     level = nextLevel
   }
 
-  return level[0]
+  return level[0].toString('hex')
   };
 
 
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
     wtxns.unshift('0'.padStart(64,'0')); // add the coinbase txid to the wtxns array
+    // console.log(wtxns);
       const witness_commitment = generate_witness_commitment(generateMerkleRoot(wtxns));
-
       const scriptpubkey = '6a24aa21a9ed' + witness_commitment.toString('hex'); // Concatenate with the hexadecimal string of witness_commitment
       const scriptsig = "49366144657669436872616E496C6F7665426974636F696E4D696E696E67".padStart(74,'0')
       let coinbase_tx = "";
