@@ -72,8 +72,6 @@ function calculateTransactionWeight(tx) {
     return tx_weight;
 }
 
-module.exports = { calculateTransactionWeight };
-
 
 module.exports = {calculateTransactionWeight}
 

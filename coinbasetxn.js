@@ -18,56 +18,31 @@ const directory = './mempool';
 
 
 // function to generate the merkle root
-// const generateMerkleRoot = (txids) => {
-//     if (txids.length === 0) return null
+const generateMerkleRoot = (txids) => {
+    if (txids.length === 0) return null
 
-//   // reverse the txids
-//   let level = txids.map((txid) => Buffer.from(littleEndian(txid), 'hex'))
+  // reverse the txids
+  let level = txids.map((txid) => Buffer.from(littleEndian(txid), 'hex'))
 
-//   while (level.length > 1) {
-//     const nextLevel = []
+  while (level.length > 1) {
+    const nextLevel = []
 
-//     for (let i = 0; i < level.length; i += 2) {
-//       let pairHash
-//       if (i + 1 === level.length) {
-//         // In case of an odd number of elements, duplicate the last one
-//         pairHash = doubleHash(Buffer.concat([level[i] , level[i]]))
-//       } else {
-//         pairHash = doubleHash(Buffer.concat([level[i] , level[i + 1]]))
-//       }
-//       nextLevel.push(Buffer.from(pairHash, "hex"));
-//     }
-
-//     level = nextLevel
-//   }
-
-//   return level[0].toString('hex')
-//   };
-
-function generateMerkleRoot(txids) {
-    let hashes = txids.map((txid) =>
-      Buffer.from(txid.match(/../g).reverse().join(""), "hex")
-    );
-  
-    while (hashes.length > 1) {
-      let newHashes = [];
-      for (let i = 0; i < hashes.length; i += 2) {
-        let left = hashes[i];
-        let right = "";
-        if (i + 1 === hashes.length) {
-          right = left;
-        } else {
-          right = hashes[i + 1];
-        }
-        let hash = doubleHash(Buffer.concat([left, right]));
-        newHashes.push(Buffer.from(hash, "hex"));
+    for (let i = 0; i < level.length; i += 2) {
+      let pairHash
+      if (i + 1 === level.length) {
+        // In case of an odd number of elements, duplicate the last one
+        pairHash = doubleHash(Buffer.concat([level[i] , level[i]]))
+      } else {
+        pairHash = doubleHash(Buffer.concat([level[i] , level[i + 1]]))
       }
-      hashes = newHashes;
+      nextLevel.push(Buffer.from(pairHash, "hex"));
     }
-  
-    return hashes[0].toString("hex");
-  };
 
+    level = nextLevel
+  }
+
+  return level[0].toString('hex')
+  };
 
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
