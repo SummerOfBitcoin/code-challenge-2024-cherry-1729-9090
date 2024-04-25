@@ -1,4 +1,4 @@
-const { serializeP2pkh, littleEndian, verifyFiles, doubleHash, checkSigP2PKH, checkStack } = require("./functions");
+const { serializeTransaction, littleEndian, verifyFiles, doubleHash, checkSigP2PKH, checkStack } = require("./functions");
 const { create_wtxid } = require('./wtxid.js');
 const {sha256} = require('./hashes.js');
 const fs = require('fs');
@@ -133,8 +133,8 @@ try {
                         if( calculateTransactionWeight(data)){
                             weightTill += calculateTransactionWeight(data); // calculating the transaction weight 
                             if(weightTill < targetweight){
-                                wtxns.push(littleEndian(serializeP2pkh(data))); //pushing the little endain form of the normal txid
-                                txAll.push(littleEndian(serializeP2pkh(data)));
+                                wtxns.push(littleEndian(serializeTransaction(data))); //pushing the little endain form of the normal txid
+                                txAll.push(littleEndian(serializeTransaction(data)));
                             }else{
                                 weightTill += calculateTransactionWeight(data); // calculating the transaction weight
                                 break;
@@ -154,7 +154,7 @@ try {
                             weightTill += calculateTransactionWeight(data); // calculating the transaction weight
                             if(weightTill < targetweight){
                                 wtxns.push(littleEndian(create_wtxid(data))); //pushing the little endain form of the wtxid
-                                txAll.push(littleEndian(serializeP2pkh(data)))
+                                txAll.push(littleEndian(serializeTransaction(data)))
                             }
                             else{
                                 weightTill += calculateTransactionWeight(data); // calculating the transaction weight

@@ -50,18 +50,18 @@ function concVout(transaction) {
   return concatStr;
 }
 
-function serializeP2pkh(transaction) {
-  const serializeP2pkh = littleEndian(transaction.version.toString(16).padStart(8, '0')) +
+function serializeTransaction(transaction) {
+  const serializeTransaction = littleEndian(transaction.version.toString(16).padStart(8, '0')) +
     toHex(transaction.vin.length).padStart(2, '0') +
     concVin(transaction) +
     transaction.vout.length.toString(16).padStart(2, '0') +
     concVout(transaction) +
     littleEndian(toHex(transaction.locktime)).padEnd(8, '0');
-  return doubleHash(serializeP2pkh);
+  return doubleHash(serializeTransaction);
 }
 
 function verifyFiles(data) {
-  const data1 = littleEndian(serializeP2pkh(data));
+  const data1 = littleEndian(serializeTransaction(data));
   const dataBytes = Buffer.from(data1, 'hex');
   return crypto.createHash('sha256').update(dataBytes).digest('hex') + '.json';
 }
@@ -179,8 +179,8 @@ function checkStack(transaction) {
 
 
 
-module.exports = { verifyFiles,checkStack,verifyECDSASignature,createDigest,parseDER,checkSigP2PKH,createVinDigest,serializeP2pkh,concVout,concVin,doubleHash,littleEndian,ripemd160,toHex };
+module.exports = { verifyFiles,checkStack,verifyECDSASignature,createDigest,parseDER,checkSigP2PKH,createVinDigest,serializeTransaction,concVout,concVin,doubleHash,littleEndian,ripemd160,toHex };
 
 
 
-// console.log(littleEndian(serializeP2pkh(tx)));
+// console.log(littleEndian(serializeTransaction(tx)));
