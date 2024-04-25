@@ -11,6 +11,8 @@ const { p2pkh } = require("bitcoinjs-lib/src/payments/p2pkh.js");
 let wtxns = [];
 let txAll = []
 
+//checking
+
 
 
 // directory where the files are stored
