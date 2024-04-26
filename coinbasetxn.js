@@ -19,6 +19,9 @@ let txAll = []
 const directory = './mempool';
 
 
+
+
+
 // function to generate the merkle root
 const generateMerkleRoot = (txids) => {
     if (txids.length === 0) return null
@@ -45,6 +48,9 @@ const generateMerkleRoot = (txids) => {
 
   return level[0].toString('hex')
   };
+
+
+
 
   // function to generate the coinbase transaction
   function generate_coinbase_tx(wtxns){
@@ -85,11 +91,11 @@ const generateMerkleRoot = (txids) => {
       return coinbase_tx;
   }
   
+
+
   function generate_witness_commitment(W_merkleroot){
       return doubleHash( W_merkleroot + "0".padStart(64,'0'));
   }
-
-
 
 
 
@@ -103,6 +109,8 @@ const generateMerkleRoot = (txids) => {
     return true;
   }
 
+
+  
   function checkp2wpkh(tx){
     for(let i = 0;i < tx.vin.length;i++){
         // console.log(tx.vin[i].prevout.scriptpubkey_type)
@@ -112,6 +120,9 @@ const generateMerkleRoot = (txids) => {
     }
     return true;
   }
+
+
+
 
 
 
@@ -176,17 +187,6 @@ try {
 
 
 
-// write all the wtxns to a file
-const fileName = 'wtxns.txt';
-const fileContent = `wtxns:\n[${wtxns.map(item => `\n  "${item}"`).join(',')}\n]`;
-fs.writeFile(fileName, fileContent, (err) => {
-    if (err) {
-        console.error('Error writing to file:', err);
-    } else {
-        // console.log(`File "${fileName}" created successfully with wtxins as list.`);
-    }
-});
-
 
 
 
@@ -195,20 +195,8 @@ const coinbase_tx = (generate_coinbase_tx(wtxns)); //created coinbase transactio
 
 
 
-
-
 txAll.unshift(littleEndian(doubleHash(coinbase_tx))); // added the coinbase transaction to the txns array
 
-// //write all the txns to a file
-const fileName3 = 'txAll.txt';
-const fileContent3 = `txns:\n[${txAll.map(item => `\n  "${item}"`).join(',')}\n]`;
-fs.writeFile(fileName3, fileContent3, (err) => {
-    if (err) {
-        console.error('Error writing to file:', err);
-    } else {
-        // console.log(`File "${fileName2}" created successfully with txins as list.`);
-    }
-});
 
 
 

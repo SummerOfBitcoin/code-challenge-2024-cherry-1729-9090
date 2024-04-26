@@ -13,5 +13,8 @@ function generate_block(){
     block_header += "ffff001f"; // bits
     return block_header;
 }
+
+
+
 block_header = generate_block();
 module.exports = {block_header}
