@@ -27,17 +27,21 @@
 #### Cryptographic functions
 - **SHA256**
 sha256 uses buffer to convert the given data to bytes and then uses crypto library to create sha256 hash object.
+
 ![alt text](<Screenshot 2024-04-25 105659.png>)
 
 
 - **doublehash**
 double hash uses sha256 function internally twice to return the double sha256 of the given data.
+
 ![alt text](<Screenshot 2024-04-25 110428.png>)
 
 
 - **ripemd160**
 ripemd160 uses crypto library to return the ripemd160 object and returns the hexadecimal value of the returned object.
+
 ![alt text](<Screenshot 2024-04-25 110906.png>)
+
 
 
 - **OP_HASH160**
@@ -49,11 +53,13 @@ OP_HASH160 uses sha256 and ripemd160 functions internally. It first gives sha256
 
 - **tohex**
 This toHex function converts a given value to its hexadecimal representation and ensures that the result has an even number of digits by padding with a leading zero if necessary.
+
 ![alt text](<Screenshot 2024-04-25 111754.png>)
 
 
 - **littleEndian**
 The littleEndian function reverses the byte order of the input data by splitting it into pairs of characters, reversing their order, and then joining them back together.
+
 ![alt text](<Screenshot 2024-04-25 113050.png>)
 
 
@@ -64,6 +70,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 #### Serialization of transactions
 - **concVin**
 `./functions/concVin`
+
 ![alt text](<Screenshot 2024-04-25 114455.png>)
     Concatenate the vin of all transactions:
     1. Initialize an empty string concatStr.
@@ -78,6 +85,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 
 - **concVout**
 `./functions/concVout`
+
 ![alt text](<Screenshot 2024-04-25 114609.png>)
     Concatenate the vout of all transactions:
     1. Initialize an empty string concatStr.
@@ -90,6 +98,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 
 - **serializeTransaction**
 `./functions/serializeTransaction`
+
 ![alt text](<Screenshot 2024-04-25 114702.png>)
     Serialize the transaction:
     1. Initialize an empty string concatStr.
@@ -105,6 +114,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 
 ### File Verification
 `./functions/verifyFiles`
+
 ![alt text](<Screenshot 2024-04-25 131339-1.png>)
     1. Serialize the transaction data using the serializeTransaction function.
     2. Convert the serialized data to little-endian format and assign it to data1.
@@ -126,6 +136,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 
 - **checkStack (stack implementation)**
 `./functions/checkstack`
+
 ![alt text](<Screenshot 2024-04-25 144817.png>)
 Function: checkStack(transaction)
 Input: transaction - The transaction object to be checked
@@ -159,6 +170,7 @@ Input: transaction - The transaction object to be checked
 
 - **createVindigest**
 `./functions/createVindigest`
+
 ![alt text](<Screenshot 2024-04-25 140105.png>)
     1. Initialize an empty string concatStr.
     2. Iterate through each input (vin) of the transaction.
@@ -170,6 +182,7 @@ Input: transaction - The transaction object to be checked
 
 - **createDigest**
 `./functions/createDigest`
+
 ![alt text](<Screenshot 2024-04-25 140457.png>)
     1. Concatenate the following components:
         * Version of the transaction in little-endian format.
@@ -190,6 +203,7 @@ Input: transaction - The transaction object to be checked
 #### p2wpkh verification
 - **hashPrevouts**
 `./p2pwkh/hashPrevouts`
+
 ![alt text](<Screenshot 2024-04-25 120620.png>)
     1. Initialize an empty string concStr.
     2. Iterate over each entry vinEntry in transaction.vin.
@@ -199,6 +213,7 @@ Input: transaction - The transaction object to be checked
 
 - **hashSequences**
 `./p2pwkh/hashSequences`
+
 ![alt text](<Screenshot 2024-04-25 120909.png>)
     1. Initialize an empty string concStr.
     2. Iterate over each entry vinEntry in transaction.vin.
@@ -208,24 +223,28 @@ Input: transaction - The transaction object to be checked
 
 - **outpoints**
 `./p2pwkh/outpoints`
+
 ![alt text](<Screenshot 2024-04-25 121210.png>)
     1. Get the vinEntry at the specified index index from transaction.vin.
     2. Return the concatenation of the little-endian representation of vinEntry.txid and (vinEntry.vout).toString(16) padded to 8 characters.
 
 - **scriptCode**
 `./p2pwkh/scriptCode`
+
 ![alt text](<Screenshot 2024-04-25 121535.png>)
     1. Get the scriptpubkey from the prevout of the input at index inputIndex in transaction.vin.
     2. Concatenate the required script code elements and return.
 
 - **amount**
 `./p2pwkh/amount`
+
 ![alt text](<Screenshot 2024-04-25 121845.png>)
     1. Get the value from the prevout of the input at index index in transaction.vin.
     2. Convert it to a little-endian hexadecimal string padded to 16 characters and return.
 
 - **nsequence**
 `./p2pwkh/nsequence`
+
 ![alt text](<Screenshot 2024-04-25 122159.png>)
     1. Get the sequence from the input at index index in transaction.vin.
     2. Convert it to a little-endian hexadecimal string padded to 8 characters and return.
@@ -233,6 +252,7 @@ Input: transaction - The transaction object to be checked
 
 - **hashOutputs**
 `./p2wpkh/hashOutputs`
+
 ![alt text](<Screenshot 2024-04-25 122547.png>)
     1. Initialize an empty string concBytes.
     2. Iterate over each entry voutEntry in transaction.vout.
@@ -243,6 +263,7 @@ Input: transaction - The transaction object to be checked
 
 - **serializeP2WPKH**
 `./p2wpkh/serializeP2WPKH`
+
 ![alt text](<Screenshot 2024-04-25 135031.png>)
     1. Concatenate the following data in little-endian byte order:
         * Transaction version (4 bytes)
@@ -261,6 +282,7 @@ Input: transaction - The transaction object to be checked
 
 - **checkSig_p2wpkh**
 `./p2wpkh/checkSig_p2wpkh`
+
 ![alt text](<Screenshot 2024-04-25 135716.png>)
     1. Iterate through each input (vin) of the transaction.
         * Serialize the transaction data for the current input using serializeP2WPKH(transaction, i).
@@ -281,6 +303,7 @@ Transaction weight is a measure of the impact a transaction has on the size of a
 Block weight refers to the total weight of all transactions included in a block, as well as the block header itself. In traditional Bitcoin blocks (before SegWit), the block size limit was measured in megabytes (MB). However, with the introduction of SegWit, the concept of block weight was introduced to replace the traditional block size limit.The block weight limit is currently 4 million weight units (WU) for most Bitcoin blocks. The weight of each transaction contributes to the total block weight, and miners prioritize transactions based on their weight and associated fees.Block weight is fixed to be `300` units.
 
 ![alt text](<Screenshot 2024-04-25 145543.png>)
+
     1. Initialize variables tx_weight and segwit_wt to zero.
     2. Determine the type of transaction (tx_type) based on the presence of witness data.
     3. Add 4 bytes for the version field to tx_weight.
@@ -310,7 +333,9 @@ Block weight refers to the total weight of all transactions included in a block,
 
 - **create_wtxid**
 `./wtxid/create_wtxid`
+
 ![alt text](<Screenshot 2024-04-25 151043.png>)
+
     - Input: `tx` (transaction object)
     - Output: `wtxid` (transaction identifier)
     - Steps:
@@ -333,6 +358,7 @@ Block weight refers to the total weight of all transactions included in a block,
 
 - **conc_witness**
 `./wtxid/conc_witness`
+
 ![alt text](<Screenshot 2024-04-25 151418.png>)
     - Input: `tx` (transaction object)
     - Output: `concstr` (concatenated witness data)
