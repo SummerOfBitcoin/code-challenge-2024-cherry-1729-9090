@@ -72,6 +72,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 `./functions/concVin`
 
 ![alt text](<Screenshot 2024-04-25 114455.png>)
+
     Concatenate the vin of all transactions:
     1. Initialize an empty string concatStr.
     2. For each vin in transaction.vin:
@@ -87,6 +88,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 `./functions/concVout`
 
 ![alt text](<Screenshot 2024-04-25 114609.png>)
+
     Concatenate the vout of all transactions:
     1. Initialize an empty string concatStr.
     2. For each vout in transaction.vout:
@@ -100,6 +102,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 `./functions/serializeTransaction`
 
 ![alt text](<Screenshot 2024-04-25 114702.png>)
+
     Serialize the transaction:
     1. Initialize an empty string concatStr.
     2. Convert the version to `4` bytes `little-endian format` in `hexadecimal` and append to concatStr.
