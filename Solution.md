@@ -116,6 +116,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 `./functions/verifyFiles`
 
 ![alt text](<Screenshot 2024-04-25 131339-1.png>)
+
     1. Serialize the transaction data using the serializeTransaction function.
     2. Convert the serialized data to little-endian format and assign it to data1.
     3. Convert data1 to a byte buffer dataBytes using hexadecimal encoding.
@@ -138,6 +139,7 @@ The littleEndian function reverses the byte order of the input data by splitting
 `./functions/checkstack`
 
 ![alt text](<Screenshot 2024-04-25 144817.png>)
+
 Function: checkStack(transaction)
 Input: transaction - The transaction object to be checked
 
@@ -172,6 +174,7 @@ Input: transaction - The transaction object to be checked
 `./functions/createVindigest`
 
 ![alt text](<Screenshot 2024-04-25 140105.png>)
+
     1. Initialize an empty string concatStr.
     2. Iterate through each input (vin) of the transaction.
         If the current input index matches the specified index:
@@ -184,6 +187,7 @@ Input: transaction - The transaction object to be checked
 `./functions/createDigest`
 
 ![alt text](<Screenshot 2024-04-25 140457.png>)
+
     1. Concatenate the following components:
         * Version of the transaction in little-endian format.
         * Length of the vin (inputs) array in hexadecimal format.
@@ -205,6 +209,7 @@ Input: transaction - The transaction object to be checked
 `./p2pwkh/hashPrevouts`
 
 ![alt text](<Screenshot 2024-04-25 120620.png>)
+
     1. Initialize an empty string concStr.
     2. Iterate over each entry vinEntry in transaction.vin.
     3. Convert vinEntry.vout to hexadecimal string voutString padded to 8 characters.
@@ -215,6 +220,7 @@ Input: transaction - The transaction object to be checked
 `./p2pwkh/hashSequences`
 
 ![alt text](<Screenshot 2024-04-25 120909.png>)
+
     1. Initialize an empty string concStr.
     2. Iterate over each entry vinEntry in transaction.vin.
     3. Convert vinEntry.sequence to hexadecimal string sequenceString padded to 8 characters.
@@ -225,6 +231,7 @@ Input: transaction - The transaction object to be checked
 `./p2pwkh/outpoints`
 
 ![alt text](<Screenshot 2024-04-25 121210.png>)
+
     1. Get the vinEntry at the specified index index from transaction.vin.
     2. Return the concatenation of the little-endian representation of vinEntry.txid and (vinEntry.vout).toString(16) padded to 8 characters.
 
@@ -232,6 +239,7 @@ Input: transaction - The transaction object to be checked
 `./p2pwkh/scriptCode`
 
 ![alt text](<Screenshot 2024-04-25 121535.png>)
+
     1. Get the scriptpubkey from the prevout of the input at index inputIndex in transaction.vin.
     2. Concatenate the required script code elements and return.
 
@@ -239,6 +247,7 @@ Input: transaction - The transaction object to be checked
 `./p2pwkh/amount`
 
 ![alt text](<Screenshot 2024-04-25 121845.png>)
+
     1. Get the value from the prevout of the input at index index in transaction.vin.
     2. Convert it to a little-endian hexadecimal string padded to 16 characters and return.
 
@@ -246,6 +255,7 @@ Input: transaction - The transaction object to be checked
 `./p2pwkh/nsequence`
 
 ![alt text](<Screenshot 2024-04-25 122159.png>)
+
     1. Get the sequence from the input at index index in transaction.vin.
     2. Convert it to a little-endian hexadecimal string padded to 8 characters and return.
 
@@ -254,6 +264,7 @@ Input: transaction - The transaction object to be checked
 `./p2wpkh/hashOutputs`
 
 ![alt text](<Screenshot 2024-04-25 122547.png>)
+
     1. Initialize an empty string concBytes.
     2. Iterate over each entry voutEntry in transaction.vout.
     3. Concatenate little-endian representation of voutEntry.value as a hexadecimal string padded to 16 characters to concBytes.
@@ -265,6 +276,7 @@ Input: transaction - The transaction object to be checked
 `./p2wpkh/serializeP2WPKH`
 
 ![alt text](<Screenshot 2024-04-25 135031.png>)
+
     1. Concatenate the following data in little-endian byte order:
         * Transaction version (4 bytes)
         * Hash of all previous outputs (32 bytes)
@@ -284,6 +296,7 @@ Input: transaction - The transaction object to be checked
 `./p2wpkh/checkSig_p2wpkh`
 
 ![alt text](<Screenshot 2024-04-25 135716.png>)
+
     1. Iterate through each input (vin) of the transaction.
         * Serialize the transaction data for the current input using serializeP2WPKH(transaction, i).
         * Retrieve the public key and signature from the witness data of the current input.
